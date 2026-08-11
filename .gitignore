@@ -1,0 +1,11 @@
+# API 金鑰，絕對不要進版控
+.env
+
+# 抓取的原始中繼資料（約 2MB，可用 fetch_api.py 重建）
+cache/
+
+# 抓取過程的暫存
+scrape.log
+failed.json
+__pycache__/
+*.pyc

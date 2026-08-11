@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>馬克信箱 搜尋 — 找到那一封信</title>
+<meta name="description" content="搜尋《馬克信箱》全部集數的每一封信，直接跳到那個時間點收聽。">
+<meta property="og:title" content="馬克信箱 搜尋">
+<meta property="og:description" content="搜尋《馬克信箱》全部集數的每一封信，直接跳到那個時間點收聽。">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📮</text></svg>">
+<link rel="preload" href="data/index.json" as="fetch" crossorigin>
+<link rel="stylesheet" href="style.css?v=69b7cd62">
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <h1><span class="mark">📮</span> 馬克信箱 <span class="thin">搜尋</span></h1>
+    <p class="tagline" id="tagline">載入中…</p>
+
+    <div class="searchbox">
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input id="q" type="search" autocomplete="off" autocapitalize="off" spellcheck="false"
+             placeholder="搜尋一封信、一個故事、一個名字…" aria-label="搜尋">
+      <button id="clear" class="clear" type="button" aria-label="清除" hidden>&times;</button>
+    </div>
+
+    <div class="suggest" id="suggest">
+      <span class="lbl">試試：</span>
+      <button data-q="分手">分手</button>
+      <button data-q="貓">貓</button>
+      <button data-q="創業">創業</button>
+      <button data-q="鬼">鬼</button>
+      <button data-q="婆媳">婆媳</button>
+      <button data-q="離職">離職</button>
+    </div>
+  </div>
+</header>
+
+<nav class="filters" id="filters" hidden>
+  <div class="wrap">
+    <div class="years" id="years" role="group" aria-label="年份篩選"></div>
+    <div class="row2">
+      <span class="count" id="count"></span>
+      <label class="sort">
+        排序
+        <select id="sort">
+          <option value="rel">相關度</option>
+          <option value="new">最新</option>
+          <option value="old">最舊</option>
+        </select>
+      </label>
+    </div>
+  </div>
+</nav>
+
+<main class="wrap" id="main">
+  <div id="scope" class="scope" hidden></div>
+  <div id="results" class="results"></div>
+  <div id="empty" class="empty" hidden></div>
+  <button id="more" class="more" type="button" hidden>載入更多</button>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <p>
+      資料整理自 YouTube 頻道
+      <a href="https://www.youtube.com/@dearmarcy" target="_blank" rel="noopener">上班可以聽 @dearmarcy</a>
+      的公開說明欄章節。本站只是索引與導引，所有內容版權屬原頻道所有。
+    </p>
+    <p class="meta" id="footmeta"></p>
+  </div>
+</footer>
+
+<template id="tpl-row">
+  <article class="row">
+    <button class="play" type="button" aria-label="播放">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+    </button>
+    <div class="body">
+      <h3 class="title"></h3>
+      <div class="sub">
+        <button class="ep" type="button" title="只看這一集"></button>
+        <span class="dot">·</span>
+        <time class="date"></time>
+        <span class="dot">·</span>
+        <span class="ts"></span>
+      </div>
+      <div class="acts">
+        <button class="act copy" type="button">複製連結</button>
+        <button class="act copytext" type="button">複製標題＋連結</button>
+        <a class="act yt" target="_blank" rel="noopener">在 YouTube 開啟</a>
+      </div>
+    </div>
+  </article>
+</template>
+
+<script src="app.js?v=1b653f98"></script>
+</body>
+</html>
