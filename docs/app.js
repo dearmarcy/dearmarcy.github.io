@@ -505,8 +505,7 @@ async function init() {
   el.tagline.textContent =
     `${EPS.length.toLocaleString()} 集、${nStories.toLocaleString()} 則故事，點一下就從那一刻開始聽`;
   el.footmeta.textContent =
-    `索引更新於 ${data.generated}　·　${nWithCh}/${EPS.length} 集有分段時間戳` +
-    (data.skipped?.length ? `　·　另有 ${data.skipped.length} 集會員限定未收錄` : '');
+    `索引更新於 ${data.generated}　·　${nWithCh}/${EPS.length} 集有分段時間戳`;
 
   // 加一顆隨機按鈕
   const rnd = document.createElement('button');
