@@ -2,7 +2,7 @@
 """
 把 cache/ 裡的原始中繼資料，整理成前端要用的單一搜尋索引。
 
-輸出：docs/data/index.json
+輸出：docs/search/data/index.json
 
 用法：
     python build.py
@@ -22,7 +22,7 @@ sys.stdout.reconfigure(encoding="utf-8")
 
 ROOT = Path(__file__).resolve().parent
 CACHE = ROOT / "cache"
-OUT = ROOT / "docs" / "data" / "index.json"
+OUT = ROOT / "docs" / "search" / "data" / "index.json"
 FAILED_FILE = ROOT / "failed.json"
 SKIPPED_FILE = ROOT / "skipped.json"
 

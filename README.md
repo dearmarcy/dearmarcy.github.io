@@ -44,7 +44,7 @@ python build.py
 python -m http.server 8765 --directory docs
 ```
 
-開 <http://localhost:8765>。
+開 <http://localhost:8765/search/>。
 
 ---
 
@@ -91,16 +91,18 @@ git add -A && git commit -m "更新索引" && git push
 chapters.py        從說明欄解析時間戳（唯一的解析邏輯，兩支抓取腳本共用）
 fetch_api.py       用 YouTube Data API 抓中繼資料 → cache/
 scrape.py          備用：用 yt-dlp 抓（不需 API 金鑰，但會被限速）
-build.py           cache/ → docs/data/index.json
+build.py           cache/ → docs/search/data/index.json
 update.py          fetch_api + build 的組合技
 
 cache/             每集精簡後的中繼資料（gitignore，可重建）
 channel_list.json  頻道影片清單
 docs/              GitHub Pages 根目錄
-  index.html
-  app.js           搜尋、播放、連結產生
-  style.css
-  data/index.json  搜尋索引（約 60KB gzip）
+  index.html       節目介紹頁（landing，原始檔在 ../dearmarcy-landing/）
+  search/          故事搜尋站
+    index.html
+    app.js         搜尋、播放、連結產生
+    style.css
+    data/index.json  搜尋索引（約 60KB gzip）
 ```
 
 ### 為什麼 `build.py` 會重新解析說明欄
