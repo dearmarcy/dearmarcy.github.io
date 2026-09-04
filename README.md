@@ -48,22 +48,28 @@ python -m http.server 8765 --directory docs
 
 ---
 
-## 每週更新
+## 自動更新
 
-新集數出來之後：
+GitHub Actions 每天台灣時間早上 6 點跑一次（`.github/workflows/update.yml`）：
+重抓頻道清單、重建索引，有變動才 commit 回 `main`，Pages 隨即重新部署。
+也可以到 **Actions → 更新索引 → Run workflow** 手動觸發。
+
+前置條件只有一個：repo 的 **Settings → Secrets and variables → Actions**
+要有一個名為 `YOUTUBE_API_KEY` 的 secret。
+
+> 在 Actions 上跑沒問題，因為走的是官方 Data API —— 會擋資料中心 IP 的是
+> 直接爬網頁那條路（`scrape.py`）。Actions 上 `cache/` 不進版控，每次都是
+> 從零重建，約 46 點配額（每日免費額度 10,000 點），順便也會補到舊集數
+> 後來才加寫的時間戳。
+
+想在本機跑也可以：
 
 ```bash
 python update.py
-```
-
-它會重抓頻道清單、只下載還沒抓過的集數、重建索引。接著推上去：
-
-```bash
 git add -A && git commit -m "更新索引" && git push
 ```
 
-> 沒有做成 GitHub Actions 自動更新，是因為 YouTube 會擋資料中心 IP，
-> 在 Actions 上跑抓取並不穩定，本機跑反而可靠。
+`update.py` 只會下載還沒抓過的集數，然後重建索引。
 
 ---
 
