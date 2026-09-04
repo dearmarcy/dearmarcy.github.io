@@ -12,8 +12,6 @@ from __future__ import annotations
 import json
 import re
 import sys
-import time
-from datetime import datetime, timezone
 from pathlib import Path
 
 from chapters import extract as extract_chapters
@@ -243,7 +241,10 @@ def main() -> int:
     skipped = [s for s in skipped if s["i"] not in cached]
 
     payload = {
-        "generated": datetime.now(timezone.utc).astimezone().strftime("%Y-%m-%d"),
+        # 只記「資料收錄到哪一天」，不記建置時間。
+        # 建置時間每跑一次就變，會害自動更新每天都送出一筆內容沒變的 commit；
+        # 拿掉之後，index.json 只有在真的有新集數時才會不一樣。
+        "latest": eps[0]["d"] if eps else "",
         "t2s": t2s,
         "skipped": skipped,
         "eps": eps,

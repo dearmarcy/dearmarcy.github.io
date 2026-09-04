@@ -503,7 +503,7 @@ async function init() {
   const nWithCh = EPS.filter((e) => e.c.length).length;
   el.tagline.textContent = '超過千集上萬則故事，點一下就可以收聽';
   el.footmeta.textContent =
-    `索引更新於 ${data.generated}　·　${nWithCh}/${EPS.length} 集有分段時間戳`;
+    `收錄至 ${ymd(data.latest)}　·　${nWithCh}/${EPS.length} 集有分段時間戳`;
 
   // 加一顆隨機按鈕
   const rnd = document.createElement('button');

@@ -1,0 +1,72 @@
+name: 更新索引
+
+# 每天台灣時間早上 6 點跑一次。也可以到 Actions 分頁手動按 Run workflow。
+on:
+  schedule:
+    - cron: '0 22 * * *'   # UTC 22:00 = 台灣時間隔天 06:00
+  workflow_dispatch:
+
+# 讓這個 workflow 有權限把更新後的索引推回 repo
+permissions:
+  contents: write
+
+concurrency:
+  group: update-index
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: 安裝相依套件
+        run: pip install --quiet opencc-python-reimplemented
+
+      # cache/ 沒有進版控，所以這裡每次都是從零抓全部集數。
+      # 這是刻意的：約 46 點配額（每日免費 10,000 點），順便也會抓到
+      # 舊集數後來才補寫的說明欄時間戳。
+      - name: 抓取並重建索引
+        env:
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+        run: |
+          if [ -z "$YOUTUBE_API_KEY" ]; then
+            echo "::error::找不到 YOUTUBE_API_KEY secret。請到 Settings → Secrets and variables → Actions 新增。"
+            exit 1
+          fi
+          python fetch_api.py --refresh-list
+          python build.py
+
+      - name: 有變動才 commit
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet -- docs channel_list.json; then
+            echo "沒有新集數，這次不做任何變更。"
+          else
+            git add docs channel_list.json
+            git commit -m "自動更新索引（GitHub Actions 排程）"
+            git push
+            echo "已推送更新。"
+          fi
+
+      - name: 摘要
+        if: always()
+        run: |
+          echo "### 索引狀態" >> $GITHUB_STEP_SUMMARY
+          python - <<'PY' >> $GITHUB_STEP_SUMMARY
+          import json, pathlib
+          p = pathlib.Path("docs/search/data/index.json")
+          if p.exists():
+              d = json.loads(p.read_text(encoding="utf-8"))
+              eps = d["eps"]
+              ch = sum(len(e["c"]) for e in eps)
+              print(f"- 收錄 **{len(eps)}** 集，資料至 **{d['latest']}**")
+              print(f"- 章節 **{ch}** 則，有分段的集數 **{sum(1 for e in eps if e['c'])}**")
+          else:
+              print("- 索引檔不存在，建置可能失敗了")
+          PY
